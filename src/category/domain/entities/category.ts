@@ -13,7 +13,7 @@ export default class Category {
         return this.props.name;
     }
 
-    get description{
+    get description(){
         return this.props.description;
     }
 

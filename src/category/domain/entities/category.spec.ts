@@ -1,5 +1,6 @@
 import { omit } from "lodash";
-import Category from "./category";
+import Category, { CategoryProperties } from "./category";
+import { validate as uuidValidate } from "uuid";
 
 describe("Category Tests", () => {
   test("constructor of category", () => {
@@ -41,6 +42,22 @@ describe("Category Tests", () => {
     created_at = new Date();
     category = new Category({ name: "Movie", created_at });
     expect(category.props).toMatchObject({ name: "Movie", created_at });
+  });
+
+  test("if field", () => {
+    type CategoryData = { props: CategoryProperties; id?: string };
+    const data: CategoryData[] = [
+      { props: { name: "Movie" } },
+      { props: { name: "Movie" }, id: null },
+      { props: { name: "Movie" }, id: undefined },
+      { props: { name: "Movie" }, id: "d96827d5-2aa5-4d38-acc8-e77e090cf11d" },
+    ];
+
+    data.forEach((item) => {
+      const category = new Category(item.props, item.id);
+      expect(category.id).not.toBeNull();
+      expect(uuidValidate(category.id)).toBeTruthy();
+    });
   });
 
   test("getter of name prop", () => {
